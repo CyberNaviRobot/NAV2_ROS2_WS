@@ -8,7 +8,7 @@ def generate_launch_description():
       executable='map_server',
       name='map_server',
       output='screen',
-      parameters=[{'use_sim_time': True},
+      parameters=[{'use_sim_time': False},        #是否启用仿真时间
                   {'yaml_filename':map_file}]
   )
   manager_mapper_node = Node(
@@ -16,7 +16,7 @@ def generate_launch_description():
     executable='lifecycle_manager',
     name='lifecycle_manager_mapper',
     output='screen',
-    parameters=[{'use_sim_time': True},
+    parameters=[{'use_sim_time': False},   #是否启用仿真时间
       {'autostart': True},
       {'node_names': ['map_server']}]
   )
