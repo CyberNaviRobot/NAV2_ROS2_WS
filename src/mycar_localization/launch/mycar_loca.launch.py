@@ -15,6 +15,7 @@ def generate_launch_description():
         output='screen',
         parameters=[amcl_yaml]
     )
+
     manager_localization_node = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
@@ -24,6 +25,7 @@ def generate_launch_description():
             {'autostart': True},
             {'node_names': ['amcl']}]
     )
+
     map_server_launch = IncludeLaunchDescription(
         launch_description_source=PythonLaunchDescriptionSource(
             launch_file_path=([get_package_share_directory("mycar_map_server"),"/launch/map_server.launch.py"])

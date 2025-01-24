@@ -38,4 +38,11 @@
     z_rand: 0.5
     z_short: 0.05
     scan_topic: scan
-    set_initial_pose: false
+    # 如果不在本参数内初始化初始位置，可以在rviz2里初始化，但是可能会造成时间戳不同步的问题
+    # set_initial_pose: false
+    set_initial_pose: true
+    initial_pose:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0

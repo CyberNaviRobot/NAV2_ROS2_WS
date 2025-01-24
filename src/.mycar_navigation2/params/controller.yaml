@@ -2,8 +2,8 @@
   ros__parameters:
     use_sim_time: False
     controller_frequency: 10.0
-    min_x_velocity_threshold: 0.001
-    min_y_velocity_threshold: 0.5
+    min_x_velocity_threshold: 0.1     # 🚀全向底盘修改：建议降低到 0.1（允许更小的Y轴速度响应）
+    min_y_velocity_threshold: 0.1
     min_theta_velocity_threshold: 0.001
     # failure_tolerance: 0.3
     failure_tolerance: 1.0
@@ -14,42 +14,42 @@
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.5
+      required_movement_radius: 0.3   # 🚀全向底盘修改：建议降低到 0.3（避免横向移动时误判停滞）
       movement_time_allowance: 10.0
 
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.25
+      xy_goal_tolerance: 0.15    # 🚀全向底盘修改：建议调整到 0.15（全向精度更高）
       yaw_goal_tolerance: 0.25
 
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
-      min_vel_x: 0.0
-      min_vel_y: 0.0
+      min_vel_x: -0.2       # 🚀全向底盘修改：允许反向移动（设为 -max_vel_y）
+      min_vel_y: -0.2       
       # max_vel_x: 0.15
-      max_vel_x: 0.2
-      max_vel_y: 0.0
+      max_vel_x: 0.2        # 🚀全向底盘修改：改为 0.2（启用Y轴运动）
+      max_vel_y: 0.2       
       # max_vel_theta: 1.0
       max_vel_theta: 1.0
-      min_speed_xy: 0.0
-      max_speed_xy: 0.2
+      min_speed_xy: -0.3
+      max_speed_xy: 0.3       # 🚀全向底盘修改：建议增大到 0.3（适应XY合成速度）
       min_speed_theta: 0.0
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
       acc_lim_x: 1.0
-      acc_lim_y: 0.0
+      acc_lim_y: 1.0          # 🚀全向底盘修改：改为 1.0（允许Y轴加速）
       acc_lim_theta: 3.2
       decel_lim_x: -1.0
-      decel_lim_y: 0.0
+      decel_lim_y: -1.0       # 🚀全向底盘修改：改为 -1.0（允许Y轴减速）
       decel_lim_theta: -3.2
       # vx_samples: 20
       vx_samples: 20
-      vy_samples: 5
+      vy_samples: 20           # 🚀全向底盘修改：建议增加到 20（生成更多横向轨迹）
       vtheta_samples: 20
-      sim_time: 1.7
+      sim_time: 1.0           # 🚀全向底盘修改：建议降低到 1.0（更快响应横向变化）
       linear_granularity: 0.05
       angular_granularity: 0.025
       # transform_tolerance: 0.2
@@ -59,14 +59,15 @@
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
+      # 🚀全向底盘修改：调整评分器权重以适应横向运动
+      BaseObstacle.scale: 0.05        # 原0.02（提高避障灵敏度）
+      PathAlign.scale: 24.0          # 原32.0（降低路径对齐权重）
       PathAlign.forward_point_distance: 0.1
-      GoalAlign.scale: 24.0
+      GoalAlign.scale: 18.0         # 原24.0（降低目标对齐权重）
       GoalAlign.forward_point_distance: 0.1
       PathDist.scale: 32.0
       GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
+      RotateToGoal.scale: 24.0          # 原32.0（减少旋转权重）
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 /**:
@@ -76,18 +77,18 @@
       publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_link
-      use_sim_time: False
+      use_sim_time: True
       rolling_window: True
-      width: 2
-      height: 2
+      width: 3                  # 🚀全向底盘修改：建议增大到 3（适应横向运动范围）
+      height: 3                 # 🚀全向底盘修改：建议增大到 3
       resolution: 0.05
       # robot_radius: 0.20
       footprint: "[[0.19, 0.13], [0.19, -0.13], [-0.19, -0.13], [-0.19, 0.13]]"
       plugins: ["obstacle_layer", "voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        inflation_radius: 0.5
-        cost_scaling_factor: 4.0
+        inflation_radius: 0.4         # 🚀全向底盘修改：减小到 0.4（允许更靠近障碍物横向移动）
+        cost_scaling_factor: 3.0      # 建议调整为 3.0（降低膨胀梯度）
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True

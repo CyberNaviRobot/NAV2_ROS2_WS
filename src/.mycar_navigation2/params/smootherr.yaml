@@ -1,0 +1,28 @@
+/**:
+  ros__parameters:
+    costmap_topic: global_costmap/costmap_raw
+    footprint_topic: global_costmap/published_footprint
+    robot_base_frame: base_link
+    transform_timeout: 0.1
+    smoother_plugins: ["simple_smoother"]
+    simple_smoother:
+      plugin: "nav2_smoother::SimpleSmoother"
+      # tolerance: 1.0e-10       
+      # 🚀全向底盘修改：增大到 1e-5（允许横向微调）
+      tolerance: 1.0e-5       
+      do_refinement: True   # 🚀关键：保持开启路径细化（默认也是开启的）
+      # 🚀全向底盘新增参数（若支持）：
+      holonomic: true                         # 启用全向模式（部分插件支持）
+      max_linear_correction: 0.2              # 允许更大的横向修正幅度
+      max_angular_correction: 0.5             # 减少角度修正权重
+
+      #或者使用大改
+      # smoother_plugins: ["ceres_smoother"]          # 🚀替换插件
+      # ceres_smoother:
+      #   plugin: "nav2_smoother::CeresSmoother"
+      #   holonomic: true                             # 启用全向
+      #   smoother_max_iterations: 1000               # 增加迭代次数
+      #   weg_forward_penalty: 1.0                    # 降低前向权重
+      #   weg_angular_penalty: 0.5                    # 降低旋转权重
+      #   weg_linear_penalty: 0.5                     # 降低纵向权重
+      #   weg_holonomic_penalty: 0.3                  # 新增横向运动权重

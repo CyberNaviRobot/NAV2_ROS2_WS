@@ -4,8 +4,12 @@
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
-    default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"
-    bt_loop_duration: 10
+    # 🚀全向底盘修改：更换支持全向的行为树模板
+    # default_bt_xml_filename: "navigate_w_replanning_and_recovery.xml"
+    default_bt_xml_filename: "navigate_w_holonomic.xml"
+    # 🚀从10→100ms（适应全向精细控制）
+    # bt_loop_duration: 10          
+    bt_loop_duration: 100          
     default_server_timeout: 20
     enable_groot_monitoring: True
     groot_zmq_publisher_port: 1666
@@ -42,3 +46,13 @@
     - nav2_planner_selector_bt_node
     - nav2_controller_selector_bt_node
     - nav2_goal_checker_selector_bt_node
+    # 🚀全向底盘新增插件
+    - nav2_lateral_escape_action_bt_node       # 横向避障行为节点
+    - nav2_drive_on_heading_action_bt_node     # 全向移动节点
+    # 🚀修改目标检查参数
+    goal_checker:
+      xy_goal_tolerance: 0.3                   # 原默认0.25
+      yaw_goal_tolerance: 0.5                  # 原默认0.25
+
+    # 🚀全向恢复逻辑优化
+    recovery_plugins: ["spin", "backup", "lateral_escape"]  # 原仅spin/backup
