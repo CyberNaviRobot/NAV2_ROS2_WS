@@ -33,7 +33,7 @@ MAP_BUILDER.use_trajectory_builder_2d = true -- 启用2D轨迹构建器
 TRAJECTORY_BUILDER_2D.min_range = 0.15 -- 最小雷达有效距离
 TRAJECTORY_BUILDER_2D.max_range = 6.0 -- 最大雷达有效距离
 TRAJECTORY_BUILDER_2D.missing_data_ray_length = 3. -- 缺失数据的射线长度
-TRAJECTORY_BUILDER_2D.use_imu_data = false -- 是否使用 imu 数据
+TRAJECTORY_BUILDER_2D.use_imu_data = true -- 是否使用 imu 数据
 TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true -- 是否使用在线相关扫描匹配
 TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians = math.rad(0.1) -- 运动滤波器的最大角度限制（以弧度为单位）
 

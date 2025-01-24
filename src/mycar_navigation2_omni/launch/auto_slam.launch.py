@@ -9,13 +9,18 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
 
-    amcl_pkg = get_package_share_directory("mycar_localization")
+    slam_pkg = get_package_share_directory("mycar_slam_slam_toolbox")
     nav2_pkg = get_package_share_directory("mycar_navigation2")
 
-    amcl_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(amcl_pkg,'launch',
-                                                    'mycar_loca.launch.py'))
+    slam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(slam_pkg,'launch',
+                                                    'online_sync_launch.py'))
         )
+
+    # slam_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(os.path.join(slam_pkg,'launch',
+    #                                                 'online_async_launch.py'))
+    #     )
 
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(nav2_pkg,'launch', 
@@ -23,6 +28,6 @@ def generate_launch_description():
         )
 
     ld = LaunchDescription()
-    ld.add_action(amcl_launch)
+    ld.add_action(slam_launch)
     ld.add_action(nav2_launch)
     return ld
