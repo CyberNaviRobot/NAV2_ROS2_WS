@@ -6,7 +6,7 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
-    amcl_yaml = os.path.join(get_package_share_directory('mycar_localization'),
+    amcl_yaml = os.path.join(get_package_share_directory('mycar_localization_omni'),
         'params', 'amcl.yaml')
     amcl_node = Node(
         package='nav2_amcl',
